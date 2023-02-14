@@ -6,6 +6,7 @@ MIT License
 import numpy as np
 
 from layouts import Grid
+import json
 
 
 class GridStack:
@@ -72,3 +73,30 @@ class GridStack:
                 bbox[:] = [x, y + space, w, h]
 
         return layouts
+    
+    
+class SampleStack:
+    def __init__(self, path, align):
+        self.path = path
+        
+        path = ''.join(path.split('.')[:-1])+'.json'
+        
+        with open(path, encoding='utf-8') as json_file:
+            annotation_objects = json.load(json_file)
+        
+        aligns = np.random.choice(align,len(annotation_objects))
+        
+        formated_objects = []
+        for obj,align in zip(annotation_objects,aligns):
+            title = obj['title']
+            bbox = obj['bbox']
+            top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']
+            
+            upper_case = 1
+                
+            formated_objects.append(([left, top, width, height],align,title,upper_case))
+            
+        self.layouts = [formated_objects]
+
+    def generate(self):
+        return self.layouts

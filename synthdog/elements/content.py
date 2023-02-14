@@ -8,8 +8,8 @@ from collections import OrderedDict
 import numpy as np
 from synthtiger import components
 
-from elements.textbox import TextBox
-from layouts import GridStack
+from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox
+from layouts import GridStack,SampleStack
 
 
 class TextReader:
@@ -71,34 +71,61 @@ class TextReader:
 
 class Content:
     def __init__(self, config):
+        self.config = config
         self.margin = config.get("margin", [0, 0.1])
         self.reader = TextReader(**config.get("text", {}))
         self.font = components.BaseFont(**config.get("font", {}))
-        self.layout = GridStack(config.get("layout", {}))
-        self.textbox = TextBox(config.get("textbox", {}))
+        self.align = config['layout']['align']
+        
         self.textbox_color = components.Switch(components.Gray(), **config.get("textbox_color", {}))
         self.content_color = components.Switch(components.Gray(), **config.get("content_color", {}))
 
-    def generate(self, size):
-        width, height = size
+    def generate(self, meta):
+        # width, height = (meta["w"],meta['h'])
 
-        layout_left = width * np.random.uniform(self.margin[0], self.margin[1])
-        layout_top = height * np.random.uniform(self.margin[0], self.margin[1])
-        layout_width = max(width - layout_left * 2, 0)
-        layout_height = max(height - layout_top * 2, 0)
-        layout_bbox = [layout_left, layout_top, layout_width, layout_height]
+        # layout_left = width * np.random.uniform(self.margin[0], self.margin[1])
+        # layout_top = height * np.random.uniform(self.margin[0], self.margin[1])
+        # layout_width = max(width - layout_left * 2, 0)
+        # layout_height = max(height - layout_top * 2, 0)
+        # layout_bbox = [layout_left, layout_top, layout_width, layout_height]
 
         text_layers, texts = [], []
-        layouts = self.layout.generate(layout_bbox)
+        
+        layout = SampleStack(meta['path'],self.align)
+        
+        layouts = layout.generate()
+        
         self.reader.move(np.random.randint(len(self.reader)))
 
         for layout in layouts:
             font = self.font.sample()
 
-            for bbox, align in layout:
+            for bbox, align, title, upper_case in layout:
                 x, y, w, h = bbox
-                text_layer, text = self.textbox.generate((w, h), self.reader, font)
-                self.reader.prev()
+                
+                upper_case = upper_case>0.5
+                
+                if title in ['Address']:
+                    tb_config = self.config.get("textbox", {})
+                    tb_config['upper_case'] = upper_case
+                    addresstextbox = AddressTextBox(tb_config)
+                    text_layer, text = addresstextbox.generate((w, h), font)
+                elif title in ['Amount']:
+                    tb_config = self.config.get("textbox", {})
+                    tb_config['upper_case'] = upper_case
+                    amounttextbox = AmountTextBox(tb_config)
+                    text_layer, text = amounttextbox.generate((w, h), font)
+                elif title in ['Date']:
+                    tb_config = self.config.get("textbox", {})
+                    tb_config['upper_case'] = upper_case
+                    datetextbox = DateTextBox(tb_config)
+                    text_layer, text = datetextbox.generate((w, h), font)
+                else:
+                    tb_config = self.config.get("textbox", {})
+                    tb_config['upper_case'] = upper_case
+                    textbox = TextBox(tb_config)
+                    text_layer, text = textbox.generate((w, h), self.reader, font)
+                    self.reader.prev()
 
                 if text_layer is None:
                     continue
