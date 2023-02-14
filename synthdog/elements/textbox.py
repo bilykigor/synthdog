@@ -51,6 +51,48 @@ class TextBox:
         text_layer = layers.Group(char_layers).merge()
 
         return text_layer, text
+    
+    
+class NumberTextBox:
+    def __init__(self, config):
+        self.fill = config.get("fill", [1, 1])
+        self.upper_case = config.get("upper_case", False)
+
+    def generate(self, size, font):
+        width, height = size
+
+        char_layers, chars = [], []
+        fill = np.random.uniform(self.fill[0], self.fill[1])
+        width = np.clip(width * fill, height, width)
+        font = {**font, "size": int(height)}
+        left, top = 0, 0
+
+        while True:
+            char = str(np.random.choice([1,2,3,4,5,6,7,8,9,0],1)[0])
+            if not chars:
+                if char=='0':
+                    char = '1'
+                    
+            if self.upper_case:
+                char = char.upper()
+
+            char_layer = layers.TextLayer(char, **font)
+            char_scale = height / char_layer.height
+            char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
+            if char_layer.right > width:
+                break
+
+            char_layers.append(char_layer)
+            chars.append(char)
+            left = char_layer.right
+
+        text = "".join(chars).strip()
+        if len(char_layers) == 0 or len(text) == 0:
+            return None, None
+
+        text_layer = layers.Group(char_layers).merge()
+
+        return text_layer, text
 
 
 class AmountTextBox:
@@ -193,7 +235,7 @@ def generate_timestamp(start, end):
     return start + random.random() * (end - start)
 
 
-monthes = [
+months = [
     '',
     'Jan',
     'Feb',
@@ -226,7 +268,7 @@ class DateTextBox:
         day = time_dict.tm_mday
 
         if self.abbreviation:
-            month = monthes[month]
+            month = months[month]
 
         if self.format == "dmY":
             return f"{day}{self.separator}{month}{self.separator}{year}"

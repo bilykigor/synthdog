@@ -8,7 +8,7 @@ from collections import OrderedDict
 import numpy as np
 from synthtiger import components
 
-from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox
+from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox
 from layouts import GridStack,SampleStack
 
 
@@ -115,6 +115,11 @@ class Content:
                     tb_config['upper_case'] = upper_case
                     amounttextbox = AmountTextBox(tb_config)
                     text_layer, text = amounttextbox.generate((w, h), font)
+                elif title in ['Cheque number']:
+                    tb_config = self.config.get("textbox", {})
+                    tb_config['upper_case'] = upper_case
+                    numbertextbox = NumberTextBox(tb_config)
+                    text_layer, text = numbertextbox.generate((w, h), font)
                 elif title in ['Date']:
                     tb_config = self.config.get("textbox", {})
                     tb_config['upper_case'] = upper_case
