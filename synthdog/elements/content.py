@@ -75,6 +75,7 @@ class Content:
         self.reader = TextReader(**config.get("text", {}))
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
+        self.micr_font = components.BaseFont(paths=['resources/font/sup'], weights=[1]).sample()
 
         self.textbox_color = components.Switch(components.Gray(), **config.get("textbox_color", {}))
         self.content_color = components.Switch(components.Gray(), **config.get("content_color", {}))
@@ -96,12 +97,75 @@ class Content:
         
         self.reader.move(np.random.randint(len(self.reader)))
 
-        amount = 0
+        amount = None
         for layout in layouts:
             base_font = self.font.sample()
-            f = components.BaseFont(paths=['resources/font/sup'], weights=[1])
-            micr_font = f.sample()
+            
+            for bbox, align, title, upper_case, bold in layout:
+                if title not in ['Amount']:
+                    continue
+                
+                font = base_font.copy()
+                font['bold'] = bold
+                
+                x, y, w, h = bbox
+                
+                upper_case = upper_case>0.5
+                
+                tb_config = self.config.get("textbox", {})
+                tb_config['upper_case'] = upper_case
+                
+                amounttextbox = AmountTextBox(tb_config)
+                text_layer, amount = amounttextbox.generate((w, h), font)
+                
+                if text_layer is None:
+                    continue
 
+                text_layer.center = (x + w / 2, y + h / 2)
+                if align == "left":
+                    text_layer.left = x
+                if align == "right":
+                    text_layer.right = x + w
+
+                self.textbox_color.apply([text_layer])
+                text_layers.append(text_layer)
+                
+        cheque_number = None
+        for layout in layouts:
+            base_font = self.font.sample()
+            
+            for bbox, align, title, upper_case, bold in layout:
+                if title not in ['Cheque number']:
+                    continue
+                
+                font = base_font.copy()
+                font['bold'] = bold
+                
+                x, y, w, h = bbox
+                
+                upper_case = upper_case>0.5
+                
+                tb_config = self.config.get("textbox", {})
+                tb_config['upper_case'] = upper_case
+                
+                numbertextbox = NumberTextBox(tb_config)
+                text_layer, cheque_number = numbertextbox.generate((w, h), font)
+                
+                if text_layer is None:
+                    continue
+
+                text_layer.center = (x + w / 2, y + h / 2)
+                if align == "left":
+                    text_layer.left = x
+                if align == "right":
+                    text_layer.right = x + w
+
+                self.textbox_color.apply([text_layer])
+                text_layers.append(text_layer)
+        
+        for layout in layouts:
+            base_font = self.font.sample()
+            
             for bbox, align, title, upper_case, bold in layout:
                 font = base_font.copy()
                 font['bold'] = bold
@@ -113,17 +177,11 @@ class Content:
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
                 
-                if title in ['Remove']:
-                    pass
+                if title in ['Remove','Amount','Cheque number']:
+                    continue
                 elif title in ['Address']:
                     addresstextbox = AddressTextBox(tb_config)
                     text_layer, text = addresstextbox.generate((w, h), font)
-                elif title in ['Amount']:
-                    amounttextbox = AmountTextBox(tb_config)
-                    text_layer, amount = amounttextbox.generate((w, h), font)
-                elif title in ['Cheque number']:
-                    numbertextbox = NumberTextBox(tb_config)
-                    text_layer, text = numbertextbox.generate((w, h), font)
                 elif title in ['Code']:
                     codetextbox = CodeTextBox(tb_config)
                     text_layer, text = codetextbox.generate((w, h), font)
@@ -137,7 +195,7 @@ class Content:
                     text_layer, text = textbox.generate((w, h), text, font)
                 elif title in ['MICR']:
                     micrbox = MICRTextBox(tb_config)
-                    text_layer, text = micrbox.generate((w, h), micr_font)
+                    text_layer, text = micrbox.generate((w, h), self.micr_font, cheque_number)
                 else:
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), self.reader, font)

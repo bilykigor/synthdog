@@ -8,7 +8,8 @@ from synthtiger import components
 
 from elements.content import Content
 from elements.paper import Paper, CheckPaper
-
+from synthtiger import layers
+import cv2
 
 class Document:
     def __init__(self, config):
@@ -80,11 +81,19 @@ class CheckDocument:
             **config.get("effect", {}),
         )
 
-    def generate(self, size=None):
-        paper_layer, paper_meta = self.paper.generate(size)
-        
+    def generate(self, size):
+        paper_layer, paper_meta = self.paper.generate(None)
         text_layers, texts = self.content.generate(paper_meta)
+        document_group = layers.Group([*text_layers, paper_layer]).merge()
         
-        #self.effect.apply([*text_layers, paper_layer])
+        max_width,max_height = size
+        width, height = document_group.size
+        scale = min(max_width / width, max_height / height)
+        new_width = int(width * scale)
+        new_height = int(height * scale)
+        
+        document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
+    
+        self.effect.apply([document_group])
 
-        return paper_layer, text_layers, texts
+        return document_group, texts

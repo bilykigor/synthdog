@@ -169,18 +169,18 @@ class TemplateSynthDoG(SynthDoG):
         long_size = int(short_size * aspect_ratio)
         size = (long_size, short_size) if landscape else (short_size, long_size)
 
-        #bg_layer = self.background.generate(size)
-        paper_layer, text_layers, texts = self.document.generate(size)
+        bg_layer = self.background.generate(size)
+        document_group, texts = self.document.generate(size)
 
-        document_group = layers.Group([*text_layers, paper_layer])
-        #document_space = np.clip(size - document_group.size, 0, None)
-        #document_group.left = np.random.randint(document_space[0] + 1)
-        #document_group.top = np.random.randint(document_space[1] + 1)
-        roi = np.array(paper_layer.quad, dtype=int)
+        #document_group = layers.Group([*text_layers, paper_layer])
+        document_space = np.clip(size - document_group.size, 0, None)
+        document_group.left = np.random.randint(document_space[0] + 1)
+        document_group.top = np.random.randint(document_space[1] + 1)
+        roi = np.array(document_group.quad, dtype=int)
 
-        #layer = layers.Group([*document_group.layers, bg_layer]).merge()
-        layer = document_group.merge()
-        #self.effect.apply([layer])
+        layer = layers.Group([document_group, bg_layer]).merge()
+        #layer = document_group.merge()
+        self.effect.apply([layer])
 
         image = layer.output()
         label = " ".join(texts)

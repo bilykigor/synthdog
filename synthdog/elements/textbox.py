@@ -82,14 +82,14 @@ class CodeTextBox:
         left, top = 0, 0
 
         while True:
-            char = np.random.choice(['1','2','3','4','5','6','7','8','9','0','/','-'],1)[0]
+            char = random.choice(['1','2','3','4','5','6','7','8','9','0','/','-'])
             if not chars:
                 if char in ['0','-','/']:
                     char = '1'
             
             if char in ['-','/']:
                 if len(not_chars)>=2:
-                    char = np.random.choice(['1','2','3','4','5','6','7','8','9','0'],1)[0]
+                    char = random.choice(['1','2','3','4','5','6','7','8','9','0'])
                 else:
                     not_chars.append(char)
                     
@@ -131,7 +131,7 @@ class NumberTextBox:
         left, top = 0, 0
 
         while True:
-            char = str(np.random.choice([1,2,3,4,5,6,7,8,9,0],1)[0])
+            char = str(random.choice([1,2,3,4,5,6,7,8,9,0]))
             if not chars:
                 if char=='0':
                     char = '1'
@@ -256,7 +256,7 @@ class AddressTextBox:
         address = real_random_address()
         address_line1 = f"{address['address1']}"
         address_line2 = f"{address.get('city','New York')}, {address['state']} {address['postalCode']} "
-        address_line = np.random.choice([address_line1,address_line2],1)[0]
+        address_line = random.choice([address_line1,address_line2])
         #---------------------------------------------
         address_line_width = 0
         for char in address_line:
@@ -383,16 +383,17 @@ class MICRTextBox:
         self.upper_case = False
         self.cheque_min = 1e4
         self.cheque_max = 1e8
-        self.cheque_zeros = False
+        self.cheque_zeros = True
         self.account_min = 1e7
         self.account_max = 1e13
         self.routing_min = 1e8
         self.routing_max = 1e9
 
-    def gen_micr(self, length):
+    def gen_micr(self, length, cheque_number=None):
         special_symbols = ["A", "B", "C", "D"]
 
-        cheque_number = str(np.random.randint(self.cheque_min, self.cheque_max))
+        if cheque_number is None:
+            cheque_number = str(np.random.randint(self.cheque_min, self.cheque_max))
         account_number = str(np.random.randint(self.account_min, self.account_max))
         routing_number = str(np.random.randint(self.routing_min, self.routing_max))
 
@@ -400,24 +401,30 @@ class MICRTextBox:
             cheque_number = '0' * (int(np.log10(self.cheque_max)) - len(cheque_number)) + cheque_number
 
         numbers = [cheque_number, account_number, routing_number]
-        for i in range(len(numbers)):
-            if random.random() < 0.5:
-                numbers[i] = random.choice(special_symbols) + numbers[i]
-            if random.random() < 0.5:
-                numbers[i] = numbers[i] + random.choice(special_symbols)
+        for ix, _ in enumerate(numbers):
+            special_symbol = random.choice(special_symbols)
+            if ix==0:
+                special_symbol = "C"
+            elif special_symbol == "C":
+                special_symbol = random.choice(["B", "A", "D"])
+                
+            if random.random() < 0.9:
+                numbers[ix] = special_symbol + numbers[ix]
+            if random.random() < 0.9:
+                numbers[ix] = numbers[ix] + special_symbol
 
         length_rem = (length - len(numbers[0]) - len(numbers[1]) - len(numbers[0]))
         out = ""
-        f_spacing_l = np.random.randint(length_rem)
+        f_spacing_l = np.random.randint(2, int(length_rem/2))
         length_rem = length_rem - f_spacing_l
-        s_spacing_l = np.random.randint(length_rem)
+        s_spacing_l = np.random.randint(2, length_rem)
 
         random.shuffle(numbers)
         out = numbers[0] + " " * (int(f_spacing_l * 0.5)) + numbers[1] + " " * (int(s_spacing_l * 0.5)) + numbers[2]
 
         return out
 
-    def generate(self, size, font):
+    def generate(self, size, font, cheque_number):
         width, height = size
 
         char_layers, chars = [], []
@@ -435,7 +442,7 @@ class MICRTextBox:
         if line_len < gen_max_len:
             char_scale = line_len / gen_max_len
 
-        micr_str = self.gen_micr(line_len)
+        micr_str = self.gen_micr(line_len, cheque_number)
 
         micr_str_line_width = 0
         for char in micr_str:

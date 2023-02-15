@@ -22,7 +22,7 @@ class CheckPaper:
         self.image = components.BaseTexture(**config.get("image", {}))
 
     def generate(self, size=None):
-        meta = self.image.sample(None)
+        meta = self.image.sample(size)
         texture = self.image.data(meta)
         
         size = (meta["w"],meta['h'])
@@ -33,8 +33,7 @@ class CheckPaper:
         
         texture = clean_texture2(texture, annotation_objects,meta["alpha"])
         
-        paper_layer = layers.RectLayer(size, (255, 255, 255, 255))
-        paper_layer.image = texture
+        paper_layer = layers.Layer(texture)
 
         return paper_layer, meta
     
