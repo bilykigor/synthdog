@@ -4,7 +4,7 @@ Copyright (c) 2022-present NAVER Corp.
 MIT License
 """
 from synthtiger import components, layers
-from .utils import  read_annotations, clean_texture
+from .utils import  read_annotations, clean_texture, clean_texture2
 
 class Paper:
     def __init__(self, config):
@@ -31,7 +31,7 @@ class CheckPaper:
         path = ''.join(path.split('.')[:-1])+'.json'
         annotation_objects = read_annotations(path)
         
-        texture = clean_texture(texture, annotation_objects,meta["alpha"])
+        texture = clean_texture2(texture, annotation_objects,meta["alpha"])
         
         paper_layer = layers.RectLayer(size, (255, 255, 255, 255))
         paper_layer.image = texture

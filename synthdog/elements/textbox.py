@@ -28,6 +28,18 @@ class TextBox:
         font = {**font, "size": int(height)}
         left, top = 0, 0
 
+        char_scale = 1#height / char_layer.height
+        
+        if isinstance(text,str):
+            line_width = 0
+            for char in text:
+                if self.upper_case:
+                    char = char.upper()
+                line_width += layers.TextLayer(char, **font).size[0] 
+                
+            char_scale = min(width/line_width,1)
+            
+        #--------------------------------------------- 
         for char in text:
             if char in "\r\n":
                 continue
@@ -36,7 +48,6 @@ class TextBox:
                 char = char.upper()
 
             char_layer = layers.TextLayer(char, **font)
-            char_scale = 1#height / char_layer.height
             char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
             if char_layer.right > width:
                 break
@@ -252,12 +263,6 @@ class AddressTextBox:
             if self.upper_case:
                 char = char.upper()
             address_line_width += layers.TextLayer(char, **font).size[0] 
-        
-        address_line_height = 0
-        for char in address_line:
-            if self.upper_case:
-                char = char.upper()
-            address_line_height = max(address_line_height,layers.TextLayer(char, **font).size[1])
             
         char_scale = min(width/address_line_width,1)
         
