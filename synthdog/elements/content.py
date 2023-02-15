@@ -128,7 +128,7 @@ class Content:
                     text_layer, text = codetextbox.generate((w, h), font)
                 elif title in ['Date']:
                     datetextbox = DateTextBox(tb_config)
-                    text_layer, text = datetextbox.generate((w, h), font)
+                    text_layer, date_text = datetextbox.generate((w, h), font)
                 elif title in ['Amount text']:
                     p = inflect.engine()
                     text =p.number_to_words(amount).replace(',','')
@@ -150,8 +150,8 @@ class Content:
 
                 self.textbox_color.apply([text_layer])
                 text_layers.append(text_layer)
-                texts.append(text)
+                #texts.append(text)
 
         self.content_color.apply(text_layers)
 
-        return text_layers, texts
+        return text_layers, {'amount':amount,'date':date_text}
