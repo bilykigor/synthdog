@@ -4,11 +4,10 @@ Copyright (c) 2022-present NAVER Corp.
 MIT License
 """
 from collections import OrderedDict
-
 import numpy as np
 from synthtiger import components
 
-from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox
+from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox, MICRTextBox
 from layouts import GridStack,SampleStack
 import inflect
 
@@ -76,7 +75,7 @@ class Content:
         self.reader = TextReader(**config.get("text", {}))
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
-        
+
         self.textbox_color = components.Switch(components.Gray(), **config.get("textbox_color", {}))
         self.content_color = components.Switch(components.Gray(), **config.get("content_color", {}))
 
@@ -100,6 +99,8 @@ class Content:
         amount = 0
         for layout in layouts:
             base_font = self.font.sample()
+            f = components.BaseFont(paths=['resources/font/sup'], weights=[1])
+            micr_font = f.sample()
 
             for bbox, align, title, upper_case, bold in layout:
                 font = base_font.copy()
@@ -132,6 +133,9 @@ class Content:
                     text =p.number_to_words(amount).replace(',','')
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), text, font)
+                elif title in ['MICR']:
+                    micrbox = MICRTextBox(tb_config)
+                    text_layer, text = micrbox.generate((w, h), micr_font)
                 else:
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), self.reader, font)

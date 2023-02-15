@@ -371,3 +371,99 @@ class DateTextBox:
 
         return text_layer, text
     
+
+class MICRTextBox:
+    def __init__(self, config):
+        self.fill = config.get("fill", [1, 1])
+        self.upper_case = False
+        self.cheque_min = 1e4
+        self.cheque_max = 1e8
+        self.cheque_zeros = False
+        self.account_min = 1e7
+        self.account_max = 1e13
+        self.routing_min = 1e8
+        self.routing_max = 1e9
+
+    def gen_micr(self, length):
+        special_symbols = ["A", "B", "C", "D"]
+
+        cheque_number = str(np.random.randint(self.cheque_min, self.cheque_max))
+        account_number = str(np.random.randint(self.account_min, self.account_max))
+        routing_number = str(np.random.randint(self.routing_min, self.routing_max))
+
+        if self.cheque_zeros:
+            cheque_number = '0' * (int(np.log10(self.cheque_max)) - len(cheque_number)) + cheque_number
+
+        numbers = [cheque_number, account_number, routing_number]
+        for i in range(len(numbers)):
+            if random.random() < 0.5:
+                numbers[i] = random.choice(special_symbols) + numbers[i]
+            if random.random() < 0.5:
+                numbers[i] = numbers[i] + random.choice(special_symbols)
+
+        length_rem = (length - len(numbers[0]) - len(numbers[1]) - len(numbers[0]))
+        out = ""
+        f_spacing_l = np.random.randint(length_rem)
+        length_rem = length_rem - f_spacing_l
+        s_spacing_l = np.random.randint(length_rem)
+
+        random.shuffle(numbers)
+        out = numbers[0] + " " * (int(f_spacing_l * 0.5)) + numbers[1] + " " * (int(s_spacing_l * 0.5)) + numbers[2]
+
+        return out
+
+    def generate(self, size, font):
+        width, height = size
+
+        char_layers, chars = [], []
+        fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
+        width = np.clip(width * fill, height, width)
+        font = {**font, "size": int(height)}
+        left, top = 0, 0
+
+        char_layer = layers.TextLayer('0', **font)
+        char_scale = 1#height / char_layer.height
+        zero_width = char_layer.size[0] * char_scale
+        line_len = width // zero_width
+        gen_max_len = 3 + np.log10(self.cheque_max * self.account_max * self.routing_max) + 3 * 2 + 2
+        if line_len < gen_max_len:
+            char_scale = line_len / gen_max_len
+
+        micr_str = self.gen_micr(line_len)
+
+        micr_str_line_width = 0
+        for char in micr_str:
+            if self.upper_case:
+                char = char.upper()
+            micr_str_line_width += layers.TextLayer(char, **font).size[0] 
+        
+        micr_str_line_height = 0
+        for char in micr_str:
+            if self.upper_case:
+                char = char.upper()
+            micr_str_line_height = max(micr_str_line_height,layers.TextLayer(char, **font).size[1])
+            
+        char_scale_width = width/micr_str_line_width
+        char_scale_height = height/micr_str_line_height
+        
+        char_scale = min(char_scale_width,char_scale_height)
+        
+        for char in micr_str:
+            if char in "\r\n":
+                continue
+
+            char_layer = layers.TextLayer(char, **font)
+            char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
+
+            char_layers.append(char_layer)
+            chars.append(char)
+            left = char_layer.right
+
+        text = "".join(chars).strip()
+        if len(char_layers) == 0 or len(text) == 0:
+            return None, None
+
+        text_layer = layers.Group(char_layers).merge()
+
+        return text_layer, text
