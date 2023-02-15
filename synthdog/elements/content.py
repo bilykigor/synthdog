@@ -112,7 +112,9 @@ class Content:
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
                 
-                if title in ['Address']:
+                if title in ['Remove']:
+                    pass
+                elif title in ['Address']:
                     addresstextbox = AddressTextBox(tb_config)
                     text_layer, text = addresstextbox.generate((w, h), font)
                 elif title in ['Amount']:
