@@ -138,3 +138,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 synthdog/outputs/*
+.DS_Store
+synthdog/resources/paper/check/*.png

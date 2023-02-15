@@ -24,20 +24,20 @@ class SynthDoG(templates.Template):
         self.landscape = config.get("landscape", 0.5)
         self.short_size = config.get("short_size", [720, 1024])
         self.aspect_ratio = config.get("aspect_ratio", [1, 2])
-        print(self.aspect_ratio)
         self.background = Background(config.get("background", {}))
         self.document = Document(config.get("document", {}))
-        self.effect = components.Iterator([])
-        # 
-        #     [
-        #         components.Switch(components.RGB()),
-        #         components.Switch(components.Shadow()),
-        #         components.Switch(components.Contrast()),
-        #         components.Switch(components.Brightness()),
-        #         components.Switch(components.MotionBlur()),
-        #         components.Switch(components.GaussianBlur()),
-        #     ],
-        #     **config.get("effect", {}),
+        self.effect = components.Iterator(
+        
+            [
+                components.Switch(components.RGB()),
+                components.Switch(components.Shadow()),
+                components.Switch(components.Contrast()),
+                components.Switch(components.Brightness()),
+                components.Switch(components.MotionBlur()),
+                components.Switch(components.GaussianBlur()),
+            ],
+            **config.get("effect", {}),
+        )
         
 
         # config for splits
@@ -52,18 +52,18 @@ class SynthDoG(templates.Template):
         long_size = int(short_size * aspect_ratio)
         size = (long_size, short_size) if landscape else (short_size, long_size)
 
-        #bg_layer = self.background.generate(size)
+        bg_layer = self.background.generate(size)
         paper_layer, text_layers, texts = self.document.generate(size)
 
         document_group = layers.Group([*text_layers, paper_layer])
-        #document_space = np.clip(size - document_group.size, 0, None)
-        #document_group.left = np.random.randint(document_space[0] + 1)
-        #document_group.top = np.random.randint(document_space[1] + 1)
+        document_space = np.clip(size - document_group.size, 0, None)
+        document_group.left = np.random.randint(document_space[0] + 1)
+        document_group.top = np.random.randint(document_space[1] + 1)
         roi = np.array(paper_layer.quad, dtype=int)
 
-        #layer = layers.Group([*document_group.layers, bg_layer]).merge()
-        layer = document_group.merge()
-        #self.effect.apply([layer])
+        layer = layers.Group([*document_group.layers, bg_layer]).merge()
+        #layer = document_group.merge()
+        self.effect.apply([layer])
 
         image = layer.output()
         label = " ".join(texts)
