@@ -23,6 +23,7 @@ class TextBox:
 
         char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
         width = np.clip(width * fill, height, width)
         font = {**font, "size": int(height)}
         left, top = 0, 0
@@ -35,7 +36,56 @@ class TextBox:
                 char = char.upper()
 
             char_layer = layers.TextLayer(char, **font)
-            char_scale = height / char_layer.height
+            char_scale = 1#height / char_layer.height
+            char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
+            if char_layer.right > width:
+                break
+
+            char_layers.append(char_layer)
+            chars.append(char)
+            left = char_layer.right
+
+        text = "".join(chars).strip()
+        if len(char_layers) == 0 or len(text) == 0:
+            return None, None
+
+        text_layer = layers.Group(char_layers).merge()
+
+        return text_layer, text
+    
+    
+class CodeTextBox:
+    def __init__(self, config):
+        self.fill = config.get("fill", [1, 1])
+        self.upper_case = config.get("upper_case", False)
+
+    def generate(self, size, font):
+        width, height = size
+
+        char_layers, chars, not_chars = [], [], []
+        fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
+        width = np.clip(width * fill, height, width)
+        font = {**font, "size": int(height)}
+        char_scale = 1# height / char_layer.height
+        left, top = 0, 0
+
+        while True:
+            char = np.random.choice(['1','2','3','4','5','6','7','8','9','0','/','-'],1)[0]
+            if not chars:
+                if char in ['0','-','/']:
+                    char = '1'
+            
+            if char in ['-','/']:
+                if len(not_chars)>=2:
+                    char = np.random.choice(['1','2','3','4','5','6','7','8','9','0'],1)[0]
+                else:
+                    not_chars.append(char)
+                    
+            if self.upper_case:
+                char = char.upper()
+
+            char_layer = layers.TextLayer(char, **font)
             char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
             if char_layer.right > width:
                 break
@@ -63,8 +113,10 @@ class NumberTextBox:
 
         char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
         width = np.clip(width * fill, height, width)
         font = {**font, "size": int(height)}
+        char_scale = 1# height / char_layer.height
         left, top = 0, 0
 
         while True:
@@ -77,7 +129,6 @@ class NumberTextBox:
                 char = char.upper()
 
             char_layer = layers.TextLayer(char, **font)
-            char_scale = height / char_layer.height
             char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
             if char_layer.right > width:
                 break
@@ -108,13 +159,14 @@ class AmountTextBox:
         
         char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
         width = np.clip(width * fill, height, width)
         font = {**font, "size": int(height)}
         left, top = 0, 0
         
         #---------------------------------------------
         char_layer = layers.TextLayer('5', **font)
-        char_scale = height / char_layer.height
+        char_scale = 1#height / char_layer.height
         five_width = char_layer.size[0] * char_scale
         
         char_layer = layers.TextLayer('.', **font)
@@ -132,7 +184,9 @@ class AmountTextBox:
         max_n_symbols = int(max_n_symbols/4*3)  
         #---------------------------------------------
         amount = random.randrange(1, min(10**max_n_symbols-1,self.max_amount))
-        amount = amount/100
+        amount = round(amount/100,2)
+        
+        output_amount = amount
         amount = format_decimal(amount, locale=random.choice(list(locales.values())))
         amount = str(amount)
         amount = unidecode.unidecode(amount)
@@ -140,7 +194,7 @@ class AmountTextBox:
         amount_width = 0
         for char in amount:
             char_layer = layers.TextLayer(char, **font)
-            char_scale = height / char_layer.height
+            char_scale = 1# height / char_layer.height
             char_width = char_layer.size[0] * char_scale
             amount_width += char_width
         #---------------------------------------------
@@ -161,20 +215,16 @@ class AmountTextBox:
         #---------------------------------------------    
         for char in amount:
             char_layer = layers.TextLayer(char, **font)
-            char_scale = height / char_layer.height
+            char_scale = 1# height / char_layer.height
             char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
 
             char_layers.append(char_layer)
             chars.append(char)
             left = char_layer.right
 
-        text = "".join(chars).strip()
-        if len(char_layers) == 0 or len(text) == 0:
-            return None, None
-
         text_layer = layers.Group(char_layers).merge()
 
-        return text_layer, text
+        return text_layer, output_amount
 
 
 class AddressTextBox:
@@ -187,6 +237,7 @@ class AddressTextBox:
         
         char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
         width = np.clip(width * fill, height, width)
         font = {**font, "size": int(height)}
         left, top = 0, 0
@@ -208,10 +259,7 @@ class AddressTextBox:
                 char = char.upper()
             address_line_height = max(address_line_height,layers.TextLayer(char, **font).size[1])
             
-        char_scale_width = width/address_line_width
-        char_scale_height = height/address_line_height
-        
-        char_scale = min(char_scale_width,char_scale_height)
+        char_scale = min(width/address_line_width,1)
         
         for char in address_line:
             char = char.upper()
@@ -284,6 +332,7 @@ class DateTextBox:
 
         char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
+        height *= fill
         width = np.clip(width * fill, height, width)
         font = {**font, "size": int(height)}
         left, top = 0, 0
@@ -301,10 +350,7 @@ class DateTextBox:
                 char = char.upper()
             date_str_line_height = max(date_str_line_height,layers.TextLayer(char, **font).size[1])
             
-        char_scale_width = width/date_str_line_width
-        char_scale_height = height/date_str_line_height
-        
-        char_scale = min(char_scale_width,char_scale_height)
+        char_scale = min(width/date_str_line_width,1)
         
         for char in date_str:
             if char in "\r\n":

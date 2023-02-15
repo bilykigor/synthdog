@@ -58,7 +58,7 @@ document:
       prob: 0.2
       args:
         gray: [0, 64]
-        colorize: 1
+        colorize: 0
 
   effect:
     args:

@@ -8,9 +8,9 @@ from collections import OrderedDict
 import numpy as np
 from synthtiger import components
 
-from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox
+from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox
 from layouts import GridStack,SampleStack
-
+import inflect
 
 class TextReader:
     def __init__(self, path, cache_size=2 ** 28, block_size=2 ** 20):
@@ -97,37 +97,42 @@ class Content:
         
         self.reader.move(np.random.randint(len(self.reader)))
 
+        amount = 0
         for layout in layouts:
-            font = self.font.sample()
+            base_font = self.font.sample()
 
-            for bbox, align, title, upper_case in layout:
+            for bbox, align, title, upper_case, bold in layout:
+                font = base_font.copy()
+                font['bold'] = bold
+                
                 x, y, w, h = bbox
                 
                 upper_case = upper_case>0.5
                 
+                tb_config = self.config.get("textbox", {})
+                tb_config['upper_case'] = upper_case
+                
                 if title in ['Address']:
-                    tb_config = self.config.get("textbox", {})
-                    tb_config['upper_case'] = upper_case
                     addresstextbox = AddressTextBox(tb_config)
                     text_layer, text = addresstextbox.generate((w, h), font)
                 elif title in ['Amount']:
-                    tb_config = self.config.get("textbox", {})
-                    tb_config['upper_case'] = upper_case
                     amounttextbox = AmountTextBox(tb_config)
-                    text_layer, text = amounttextbox.generate((w, h), font)
+                    text_layer, amount = amounttextbox.generate((w, h), font)
                 elif title in ['Cheque number']:
-                    tb_config = self.config.get("textbox", {})
-                    tb_config['upper_case'] = upper_case
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
+                elif title in ['Code']:
+                    codetextbox = CodeTextBox(tb_config)
+                    text_layer, text = codetextbox.generate((w, h), font)
                 elif title in ['Date']:
-                    tb_config = self.config.get("textbox", {})
-                    tb_config['upper_case'] = upper_case
                     datetextbox = DateTextBox(tb_config)
                     text_layer, text = datetextbox.generate((w, h), font)
+                elif title in ['Amount text']:
+                    p = inflect.engine()
+                    text =p.number_to_words(amount).replace(',','')
+                    textbox = TextBox(tb_config)
+                    text_layer, text = textbox.generate((w, h), text, font)
                 else:
-                    tb_config = self.config.get("textbox", {})
-                    tb_config['upper_case'] = upper_case
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), self.reader, font)
                     self.reader.prev()

@@ -92,9 +92,17 @@ class SampleStack:
             bbox = obj['bbox']
             top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']
             
+            bold = False
+            for classification in obj.get('classifications',[]):
+                if classification.get('title',False):
+                    if classification['title']=='Bold':
+                        if classification.get('answer',False):
+                            bold = classification['answer'].get('title','False')=='True'
+                            break
+            
             upper_case = 1
                 
-            formated_objects.append(([left, top, width, height],align,title,upper_case))
+            formated_objects.append(([left, top, width, height],align,title,upper_case,bold))
             
         self.layouts = [formated_objects]
 
