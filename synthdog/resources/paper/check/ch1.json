@@ -1,0 +1,230 @@
+[
+    {
+        "featureId": "cldvridyn00013b6kj3pr19cu",
+        "schemaId": "cldvrf4582eff07u96rhlc6ms",
+        "color": "#1CE6FF",
+        "title": "MICR",
+        "value": "micr",
+        "bbox": {
+            "top": 724,
+            "left": 372,
+            "height": 36,
+            "width": 1035
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cldvridyn00013b6kj3pr19cu?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cldvrikov00043b6krhbxp8xe",
+        "schemaId": "cldvrgso63ana07vs1jkubn3h",
+        "color": "#FF34FF",
+        "title": "Date",
+        "value": "date",
+        "bbox": {
+            "top": 166,
+            "left": 1637,
+            "height": 32,
+            "width": 169
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cldvrikov00043b6krhbxp8xe?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cldvritm600073b6kvk1qt311",
+        "schemaId": "cldvrgso63anc07vs3j1g03xj",
+        "color": "#FF4A46",
+        "title": "Address",
+        "value": "address",
+        "bbox": {
+            "top": 501,
+            "left": 185,
+            "height": 32,
+            "width": 431
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cldvritm600073b6kvk1qt311?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle2nuog9000a3b6jed3d4ux5",
+        "schemaId": "cldvrgso63anc07vs3j1g03xj",
+        "color": "#FF4A46",
+        "title": "Address",
+        "value": "address",
+        "bbox": {
+            "top": 147,
+            "left": 400,
+            "height": 27,
+            "width": 292
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle2nuog9000a3b6jed3d4ux5?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle38dwhc00013b6j66kap0qy",
+        "schemaId": "cldvrgso63anc07vs3j1g03xj",
+        "color": "#FF4A46",
+        "title": "Address",
+        "value": "address",
+        "bbox": {
+            "top": 173,
+            "left": 400,
+            "height": 28,
+            "width": 295
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle38dwhc00013b6j66kap0qy?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle38eawb00043b6jy6u652zb",
+        "schemaId": "cldvrgso63anc07vs3j1g03xj",
+        "color": "#FF4A46",
+        "title": "Address",
+        "value": "address",
+        "bbox": {
+            "top": 535,
+            "left": 186,
+            "height": 33,
+            "width": 430
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle38eawb00043b6jy6u652zb?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cldvrky72000a3b6kfm9vnsd8",
+        "schemaId": "cldvrgso63ane07vs1tnq4q0z",
+        "color": "#008941",
+        "title": "Amount",
+        "value": "amount",
+        "bbox": {
+            "top": 285,
+            "left": 1630,
+            "height": 39,
+            "width": 200
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cldvrky72000a3b6kfm9vnsd8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cldvrj24v000a3b6klsscdwb8",
+        "schemaId": "cldvrgso63ang07vsfy4thzzp",
+        "color": "#006FA6",
+        "title": "Cheque number",
+        "value": "cheque_number",
+        "bbox": {
+            "top": 62,
+            "left": 1769,
+            "height": 39,
+            "width": 105
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cldvrj24v000a3b6klsscdwb8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle2nt4ai00013b6jjr8ijg4y",
+        "schemaId": "cle2nrmm827h707y23nmugklq",
+        "color": "#0000A6",
+        "title": "Company name",
+        "value": "company_name",
+        "bbox": {
+            "top": 112,
+            "left": 309,
+            "height": 31,
+            "width": 478
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle2nt4ai00013b6jjr8ijg4y?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY",
+        "classifications": [
+            {
+                "featureId": "cle3al8u000043b6jpfzo9kic",
+                "schemaId": "cle33sldh14cx071h0oqe6mja",
+                "title": "Bold",
+                "value": "bold",
+                "position": 1,
+                "answer": {
+                    "featureId": "cle3al8u000033b6j4tz3njwp",
+                    "schemaId": "cle33sldh14cy071h3a65h4wc",
+                    "title": "True",
+                    "value": "true",
+                    "position": 0
+                }
+            }
+        ]
+    },
+    {
+        "featureId": "cle2nucds00073b6jg87hu73b",
+        "schemaId": "cle2nrmm827h707y23nmugklq",
+        "color": "#0000A6",
+        "title": "Company name",
+        "value": "company_name",
+        "bbox": {
+            "top": 300,
+            "left": 215,
+            "height": 31,
+            "width": 350
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle2nucds00073b6jg87hu73b?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle2nvddj000d3b6jmn81qp0o",
+        "schemaId": "cle2nrmm827h707y23nmugklq",
+        "color": "#0000A6",
+        "title": "Company name",
+        "value": "company_name",
+        "bbox": {
+            "top": 451,
+            "left": 182,
+            "height": 31,
+            "width": 348
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle2nvddj000d3b6jmn81qp0o?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle2nxzuj00013b6j1i8epfgr",
+        "schemaId": "cle2nxm1z11j107zah6q74iw9",
+        "color": "#7A4900",
+        "title": "Bank name",
+        "value": "bank_name",
+        "bbox": {
+            "top": 75,
+            "left": 1096,
+            "height": 26,
+            "width": 357
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle2nxzuj00013b6j1i8epfgr?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY",
+        "classifications": [
+            {
+                "featureId": "cle3alei600063b6j3r8b63wk",
+                "schemaId": "cle33sldg14ck071hdt8ofiyf",
+                "title": "Bold",
+                "value": "bold",
+                "position": 1,
+                "answer": {
+                    "featureId": "cle3alei600053b6j6r3n0ta6",
+                    "schemaId": "cle33sldg14cl071h0iv0ao43",
+                    "title": "True",
+                    "value": "true",
+                    "position": 0
+                }
+            }
+        ]
+    },
+    {
+        "featureId": "cle3al02t00013b6jvs1dgwy5",
+        "schemaId": "cle3akayi14od070x9bp6erhs",
+        "color": "#0000A6",
+        "title": "Code",
+        "value": "code",
+        "bbox": {
+            "top": 105,
+            "left": 1221,
+            "height": 21,
+            "width": 111
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle3al02t00013b6jvs1dgwy5?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    },
+    {
+        "featureId": "cle5kxsp200013b6jqstljwfw",
+        "schemaId": "cle5kxf6402hw070gcd5rc1x2",
+        "color": "#63FFAC",
+        "title": "Amount text",
+        "value": "amount_text",
+        "bbox": {
+            "top": 377,
+            "left": 156,
+            "height": 31,
+            "width": 1055
+        },
+        "instanceURI": "https://api.labelbox.com/masks/feature/cle5kxsp200013b6jqstljwfw?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbGJ4cXc5Nmc3Y2J5MDd4YWRhamM2M3AxIiwib3JnYW5pemF0aW9uSWQiOiJjbGJ4cXc5NjA3Y2J4MDd4YTk0aHBnZmd5IiwiaWF0IjoxNjc2NDYwNDI4LCJleHAiOjE2NzkwNTI0Mjh9.VVfgtvxsxWDUH2Ca4UMrbBhe4t3IMuJvcxFp30-zUUY"
+    }
+]
