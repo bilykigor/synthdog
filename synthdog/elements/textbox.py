@@ -213,7 +213,10 @@ class AmountTextBox:
             n_stars = int(max(0, width-amount_width)/star_width)
             if n_stars>0:
                 if self.stars_before and self.stars_after:
-                    n_stars_before = random.randrange(1, n_stars)
+                    if n_stars > 1:
+                        n_stars_before = random.randrange(1, n_stars)
+                    else:
+                        n_stars_before = 1
                     n_stars_after = n_stars-n_stars_before
                 elif self.stars_before:
                     n_stars_before = n_stars
@@ -383,7 +386,7 @@ class MICRTextBox:
         self.upper_case = False
         self.cheque_min = 1e4
         self.cheque_max = 1e8
-        self.cheque_zeros = True
+        self.cheque_zeros = False
         self.account_min = 1e7
         self.account_max = 1e13
         self.routing_min = 1e8

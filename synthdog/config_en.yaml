@@ -23,7 +23,7 @@ document:
 
   paper:
     image:
-      paths: [resources/paper/check]
+      paths: [resources/paper/check.png]
       weights: [1]
       alpha: [1, 1]
       grayscale: 0

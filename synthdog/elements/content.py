@@ -216,4 +216,4 @@ class Content:
 
         self.content_color.apply(text_layers)
 
-        return text_layers, {'amount':amount,'date':date_text}
+        return text_layers, {'amount':amount,'date':date_text, 'check number': cheque_number}

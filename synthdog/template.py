@@ -68,7 +68,7 @@ class SynthDoG(templates.Template):
         image = layer.output()
         label = " ".join(texts)
         label = label.strip()
-        label = re.sub(r"\s+", " ", label)
+        # label = re.sub(r"\s+", " ", label)s
         quality = np.random.randint(self.quality[0], self.quality[1] + 1)
 
         data = {
@@ -106,7 +106,7 @@ class SynthDoG(templates.Template):
         metadata_filepath = os.path.join(output_dirpath, metadata_filename)
         os.makedirs(os.path.dirname(metadata_filepath), exist_ok=True)
 
-        metadata = self.format_metadata(image_filename=image_filename, keys=["text_sequence"], values=[label])
+        metadata = self.format_metadata(image_filename=image_filename, keys=["check entities"], values=[label])
         with open(metadata_filepath, "a") as fp:
             json.dump(metadata, fp, ensure_ascii=False)
             fp.write("\n")
@@ -128,8 +128,8 @@ class SynthDoG(templates.Template):
         for k, v in zip(keys, values):
             _gt_parse_v[k] = v
         gt_parse = {"gt_parse": _gt_parse_v}
-        gt_parse_str = json.dumps(gt_parse, ensure_ascii=False)
-        metadata = {"file_name": image_filename, "ground_truth": gt_parse_str}
+        gt_parse_str = json.dumps(gt_parse)
+        metadata = {"file_name": image_filename, "ground_truth": values}
         return metadata
 
 
@@ -143,7 +143,7 @@ class TemplateSynthDoG(SynthDoG):
         self.landscape = config.get("landscape", 0.5)
         self.short_size = config.get("short_size", [720, 1024])
         self.aspect_ratio = config.get("aspect_ratio", [1, 2])
-        self.background = Background(config.get("background", {}))
+        # self.background = Background(config.get("background", {}))
         self.document = CheckDocument(config.get("document", {}))
         self.effect = components.Iterator(
             [
@@ -169,8 +169,9 @@ class TemplateSynthDoG(SynthDoG):
         long_size = int(short_size * aspect_ratio)
         size = (long_size, short_size) if landscape else (short_size, long_size)
 
-        bg_layer = self.background.generate(size)
+        # bg_layer = self.background.generate(size)
         document_group, texts = self.document.generate(size)
+        print(texts)
 
         #document_group = layers.Group([*text_layers, paper_layer])
         document_space = np.clip(size - document_group.size, 0, None)
@@ -178,14 +179,15 @@ class TemplateSynthDoG(SynthDoG):
         document_group.top = np.random.randint(document_space[1] + 1)
         roi = np.array(document_group.quad, dtype=int)
 
-        layer = layers.Group([document_group, bg_layer]).merge()
+        layer = layers.Group([document_group]).merge()
         #layer = document_group.merge()
         self.effect.apply([layer])
 
         image = layer.output()
-        label = " ".join(texts)
-        label = label.strip()
-        label = re.sub(r"\s+", " ", label)
+        label = texts
+        # label = " ".join(texts)
+        # label = label.strip()
+        # label = re.sub(r"\s+", " ", label)
         quality = np.random.randint(self.quality[0], self.quality[1] + 1)
 
         data = {
