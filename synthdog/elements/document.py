@@ -94,6 +94,6 @@ class CheckDocument:
         
         document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
     
-        self.effect.apply([document_group])
+        #self.effect.apply([document_group])
 
         return document_group, texts
