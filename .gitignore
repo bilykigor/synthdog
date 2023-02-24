@@ -140,3 +140,4 @@ dmypy.json
 synthdog/outputs/*
 .DS_Store
 synthdog/resources/paper/check/*.png
+*/misc/*

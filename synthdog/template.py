@@ -220,7 +220,7 @@ class TemplateSynthDoG(SynthDoG):
         comp_w,comp_h = image.size
 
         # save metadata (gt_json)
-        labels_filename = f"labelTxt/image_{idx}.txt"
+        labels_filename = f"labels/image_{idx}.txt"
         labels_filepath = os.path.join(output_dirpath, labels_filename)
         os.makedirs(os.path.dirname(labels_filepath), exist_ok=True)
         
