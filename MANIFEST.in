@@ -1,0 +1,5 @@
+include synthdog/config/*.*
+recursive-include synthdog/resources/background/ *.*
+recursive-include synthdog/resources/corpus/ *.*
+recursive-include synthdog/resources/font/en/ *.*
+recursive-include synthdog/resources/paper/ *.*

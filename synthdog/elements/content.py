@@ -7,8 +7,8 @@ from collections import OrderedDict
 import numpy as np
 from synthtiger import components
 
-from elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox, MICRTextBox
-from layouts import GridStack,SampleStack
+from synthdog.elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox, MICRTextBox
+from synthdog.layouts import GridStack,SampleStack
 import inflect
 
 class TextReader:
@@ -75,7 +75,7 @@ class Content:
         self.reader = TextReader(**config.get("text", {}))
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
-        self.micr_font = components.BaseFont(paths=['resources/font/sup'], weights=[1]).sample()
+        self.micr_font = components.BaseFont(**config.get("micr_font", {}).get('paths'), weights=[1]).sample()
 
         self.textbox_color = components.Switch(components.Gray(), **config.get("textbox_color", {}))
         self.content_color = components.Switch(components.Gray(), **config.get("content_color", {}))

@@ -5,7 +5,7 @@ MIT License
 """
 import numpy as np
 
-from layouts import Grid
+from synthdog.layouts import Grid
 import json
 
 

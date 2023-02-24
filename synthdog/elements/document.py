@@ -6,8 +6,8 @@ MIT License
 import numpy as np
 from synthtiger import components
 
-from elements.content import Content
-from elements.paper import Paper, CheckPaper
+from synthdog.elements.content import Content
+from synthdog.elements.paper import Paper, CheckPaper
 from synthtiger import layers
 import cv2
 

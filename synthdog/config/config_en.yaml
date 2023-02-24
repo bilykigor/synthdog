@@ -33,6 +33,8 @@ document:
     margin: [0, 0.1]
     text:
       path: resources/corpus/enwiki.txt
+    micr_font:
+      paths: [resources/font/sub]
     font:
       paths: [resources/font/en]
       weights: [1]

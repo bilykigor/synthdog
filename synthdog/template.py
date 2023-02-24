@@ -9,7 +9,7 @@ import re
 from typing import Any, List
 
 import numpy as np
-from elements import Background, Document, CheckDocument
+from synthdog.elements import Background, Document, CheckDocument
 from PIL import Image
 from synthtiger import components, layers, templates
 
