@@ -69,13 +69,19 @@ class TextReader:
 
 
 class Content:
-    def __init__(self, config):
+    def __init__(self, parent_path, config):
         self.config = config
         self.margin = config.get("margin", [0, 0.1])
+        config['text']['path'] = f"{parent_path}/{config['text']['path']}"
         self.reader = TextReader(**config.get("text", {}))
+       
+        config['font']['paths'] = [f'{parent_path}/{path}' for path in config['font']['paths']]
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
-        self.micr_font = components.BaseFont(**config.get("micr_font", {}).get('paths'), weights=[1]).sample()
+        
+        config['micr_font']['paths'] = [f'{parent_path}/{path}' for path in config['micr_font']['paths']]
+        self.micr_font_path = config.get("micr_font").get('paths')
+        self.micr_font = components.BaseFont(paths=self.micr_font_path, weights=[1]).sample()
 
         self.textbox_color = components.Switch(components.Gray(), **config.get("textbox_color", {}))
         self.content_color = components.Switch(components.Gray(), **config.get("content_color", {}))

@@ -52,13 +52,13 @@ class Document:
     
     
 class CheckDocument:
-    def __init__(self, config):
+    def __init__(self, parent_path, config):
         self.fullscreen = config.get("fullscreen", 0.5)
         self.landscape = config.get("landscape", 0.5)
         self.short_size = config.get("short_size", [480, 1024])
         self.aspect_ratio = config.get("aspect_ratio", [1, 2])
         self.paper = CheckPaper(config.get("paper", {}))
-        self.content = Content(config.get("content", {}))
+        self.content = Content(parent_path, config.get("content", {}))
         self.effect = components.Iterator(
             [
                 components.Switch(components.ElasticDistortion()),

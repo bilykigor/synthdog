@@ -28,7 +28,7 @@ def read_long_description():
 
 setup(
     name="synthdog",
-    version="0.0.5",#read_version(),
+    version="0.2.9",#read_version(),
     description="Customized synthdog package from donut-python project",
     long_description=read_long_description(),
     long_description_content_type="text/markdown",
@@ -60,19 +60,16 @@ setup(
                 'synthdog.resources.corpus',
                 'synthdog.resources.paper',
                 'synthdog.resources.font',
-                'synthdog.resources.font.en'
+                'synthdog.resources.font.en',
+                'synthdog.resources.font.sup'
                 ],
-    #package_dir={"": "synthdog"},
-    #py_modules=[os.path.splitext(os.path.basename(path))[0] for path in glob("synthdog/*")],
-    #py_modules = ['synthdog'],
-    # package_data={
-    #     'synthdog': ['config','resources']
-    # },
-    #data_files=[('config', ['config/train_cord.yaml'])],
     include_package_data=True,
     python_requires=">=3.7",
     install_requires=[
-        "synthtiger==1.2.1"
+        "synthtiger==1.2.1",
+        "Pillow==9.4.0",
+        "random_address==1.1.1",
+        "unidecode==1.3.4"
     ],
     classifiers=[
         "Intended Audience :: Developers",

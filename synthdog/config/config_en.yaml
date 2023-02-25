@@ -23,7 +23,7 @@ document:
 
   paper:
     image:
-      paths: [resources/paper/check]
+      paths: [paper]
       weights: [1]
       alpha: [1, 1]
       grayscale: 0
@@ -34,7 +34,7 @@ document:
     text:
       path: resources/corpus/enwiki.txt
     micr_font:
-      paths: [resources/font/sub]
+      paths: [resources/font/sup]
     font:
       paths: [resources/font/en]
       weights: [1]

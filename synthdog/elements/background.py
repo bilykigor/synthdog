@@ -5,9 +5,9 @@ MIT License
 """
 from synthtiger import components, layers
 
-
 class Background:
-    def __init__(self, config):
+    def __init__(self, parent_path,config):
+        config['image']['paths'] = [f'{parent_path}/{path}' for path in config['image']['paths']]
         self.image = components.BaseTexture(**config.get("image", {}))
         self.effect = components.Iterator(
             [
