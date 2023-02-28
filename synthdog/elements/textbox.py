@@ -73,7 +73,7 @@ class CodeTextBox:
     def generate(self, size, font):
         width, height = size
 
-        char_layers, chars, not_chars = [], [], []
+        char_layers, chars = [], []
         fill = np.random.uniform(self.fill[0], self.fill[1])
         height *= fill
         width = np.clip(width * fill, height, width)
@@ -81,18 +81,16 @@ class CodeTextBox:
         char_scale = 1# height / char_layer.height
         left, top = 0, 0
 
+        num=0
         while True:
-            char = random.choice(['1','2','3','4','5','6','7','8','9','0','/','-'])
-            if not chars:
-                if char in ['0','-','/']:
-                    char = '1'
+            num+=1
+            if num<=3:
+                char = random.choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+            elif num==4:
+                char = random.choice(['/','-'])
+            else:
+                char = random.choice(['1','2','3','4','5','6','7','8','9','0'])
             
-            if char in ['-','/']:
-                if len(not_chars)>=2:
-                    char = random.choice(['1','2','3','4','5','6','7','8','9','0'])
-                else:
-                    not_chars.append(char)
-                    
             if self.upper_case:
                 char = char.upper()
 
@@ -160,8 +158,8 @@ class NumberTextBox:
 class AmountTextBox:
     def __init__(self, config):
         self.fill = config.get("fill", [1, 1])
-        self.stars_before = True
-        self.stars_after = True
+        self.stars_before = config.get('stars_before',True)
+        self.stars_after = config.get('stars_after',True)
         self.currency_symbol = False
         self.max_amount = 1000000
 

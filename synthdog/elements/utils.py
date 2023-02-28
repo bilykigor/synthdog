@@ -20,6 +20,7 @@ def read_annotations(path):
         annotation_objects = json.load(json_file)
         
     return annotation_objects
+  
     
 def clean_texture(texture, annotation_objects,alpha):
     formated_objects = []
