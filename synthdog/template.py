@@ -301,7 +301,7 @@ class Remittance(templates.Template):
         #bg_layer = self.background.generate(size)
         #layer = layers.Group([document_group, bg_layer]).merge()
         layer = document_group
-        self.effect.apply([layer])
+        #self.effect.apply([layer])
 
         image = layer.output()
         label = texts
@@ -334,27 +334,32 @@ class Remittance(templates.Template):
         output_dirpath = os.path.join(root, self.splits[split_idx])
 
         # save image
-        image_filename = f"image_{idx}.jpg"
+        image_filename = f"images/{idx}.jpg"
         image_filepath = os.path.join(output_dirpath, image_filename)
         os.makedirs(os.path.dirname(image_filepath), exist_ok=True)
         image = Image.fromarray(image[..., :3].astype(np.uint8))
         image.save(image_filepath, quality=quality)
 
         # save metadata (gt_json)
-        metadata_filename = "metadata.jsonl"
+        metadata_filename = f"annotations/{idx}.jsonl"
         metadata_filepath = os.path.join(output_dirpath, metadata_filename)
         os.makedirs(os.path.dirname(metadata_filepath), exist_ok=True)
         
-        metadata = self.format_metadata(image_filename=image_filename, _gt_parse_v=label)
-        with open(metadata_filepath, "a") as fp:
-            json.dump(metadata, fp, ensure_ascii=False)
+        #metadata = self.format_metadata(image_filename=image_filename, _gt_parse_v=label)
+        with open(metadata_filepath, "w") as fp:
+            json.dump(label, fp, ensure_ascii=False)
             fp.write("\n")
             
     def end_save(self, root):
         pass
 
     def format_metadata(self, image_filename: str, _gt_parse_v):
-        gt_parse = {"gt_parse": _gt_parse_v}
+        gt_parse_v={}
+        for k,v in _gt_parse_v.items():
+            if v is not None:
+                gt_parse_v[k]=v
+                
+        gt_parse = {"gt_parse": gt_parse_v}
         gt_parse_str = json.dumps(gt_parse, ensure_ascii=False)
         metadata = {"file_name": image_filename, "ground_truth": gt_parse_str}
         return metadata
