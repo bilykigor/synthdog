@@ -89,6 +89,7 @@ class SampleStack:
         formated_objects = []
         for obj,align in zip(annotation_objects,aligns):
             title = obj['title']
+            value = obj['value']
             bbox = obj['bbox']
             top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']
             
@@ -102,7 +103,7 @@ class SampleStack:
             
             upper_case = 1
                 
-            formated_objects.append(([left, top, width, height],align,title,upper_case,bold))
+            formated_objects.append(([left, top, width, height],align,value,upper_case,bold))
             
         self.layouts = [formated_objects]
 

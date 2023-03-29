@@ -285,17 +285,18 @@ class Remittance(templates.Template):
         self.split_indexes = np.random.choice(3, size=10000, p=split_ratio)
 
     def generate(self):
-        landscape = np.random.rand() < self.landscape
-        short_size = np.random.randint(self.short_size[0], self.short_size[1] + 1)
-        aspect_ratio = np.random.uniform(self.aspect_ratio[0], self.aspect_ratio[1])
-        long_size = int(short_size * aspect_ratio)
-        size = (long_size, short_size) if landscape else (short_size, long_size)
+        # landscape = np.random.rand() < self.landscape
+        # short_size = np.random.randint(self.short_size[0], self.short_size[1] + 1)
+        # aspect_ratio = np.random.uniform(self.aspect_ratio[0], self.aspect_ratio[1])
+        # long_size = int(short_size * aspect_ratio)
+        # size = (long_size, short_size) if landscape else (short_size, long_size)
+        size=None
 
         document_group, texts = self.document.generate(size)
         #document_group = layers.Group([*text_layers, paper_layer])
-        document_space = np.clip(size - document_group.size, 0, None)
-        document_group.left = np.random.randint(document_space[0] + 1)
-        document_group.top = np.random.randint(document_space[1] + 1)
+        # document_space = np.clip(size - document_group.size, 0, None)
+        # document_group.left = np.random.randint(document_space[0] + 1)
+        # document_group.top = np.random.randint(document_space[1] + 1)
         roi = np.array(document_group.quad, dtype=int)
         
         #bg_layer = self.background.generate(size)

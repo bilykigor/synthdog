@@ -264,7 +264,7 @@ class RemittanceContent:
         for layout in layouts:
             base_font = self.font.sample()
             
-            for bbox, align, title, upper_case, bold in layout:
+            for bbox, align, value, upper_case, bold in layout:
                 #print(title)
                 font = base_font.copy()
                 font['bold'] = bold
@@ -276,95 +276,48 @@ class RemittanceContent:
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
                 
-                if title in ['Remove']:
+                if value in ['remove']:
                     continue
-                elif title in ['Amount']:
-                    tb_config['stars_before'] = False
-                    tb_config['stars_after'] = False
-                    amounttextbox = AmountTextBox(tb_config)
-                    text_layer, amount = amounttextbox.generate((w, h), font)
-                    
-                elif title in ['Payment amount']:
+                
+                if value in ['amount','payment_amount','invoice_amount','check_amount']:
                     tb_config['stars_before'] = False
                     tb_config['stars_after'] = False
                     amounttextbox = AmountTextBox(tb_config)
                     text_layer, text = amounttextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'payment_amount'
-                        })
-                    
-                elif title in ['Invoice amount']:
-                    tb_config['stars_before'] = False
-                    tb_config['stars_after'] = False
-                    amounttextbox = AmountTextBox(tb_config)
-                    text_layer, text = amounttextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'invoice_amount'
-                        })
-                    
-                elif title in ['Number']:
+                elif value in ['number']:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
-                    
-                elif title in ['Cheque number']:
+                elif value in ['cheque_number','payment_number','invoice_number']:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'check_number'
-                        })    
-                elif title in ['Payment number']:
-                    numbertextbox = NumberTextBox(tb_config)
-                    text_layer, text = numbertextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'payment_number'
-                        })
-                    
-                elif title in ['Address']:
+                elif value in ['address']:
                     addresstextbox = AddressTextBox(tb_config)
                     text_layer, text = addresstextbox.generate((w, h), font)
-                elif title in ['Code']:
+                elif value in ['code','reference_number']:
                     codetextbox = CodeTextBox(tb_config)
                     text_layer, text = codetextbox.generate((w, h), font)
-                elif title in ['Reference number']:
-                    codetextbox = CodeTextBox(tb_config)
-                    text_layer, text = codetextbox.generate((w, h), font)
-                elif title in ['Invoice number']:
-                    numbertextbox = NumberTextBox(tb_config)
-                    text_layer, text = numbertextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'invoice_number'
-                        })
-                elif title in ['Date']:
-                    datetextbox = DateTextBox(tb_config)
-                    text_layer, date_text = datetextbox.generate((w, h), font)
-                elif title in ['Payment date']:
+                elif value in ['date','payment_date','invoice_date','cheque_date']:
                     datetextbox = DateTextBox(tb_config)
                     text_layer, text = datetextbox.generate((w, h), font)
-                    results.append({
-                        'box':[x,y,x+w,y+h],
-                        'text':text,
-                        'label':'payment_date'
-                        })
-                    
-                elif title in ['Amount text']:
+                elif value in ['amount_text']:
                     p = inflect.engine()
                     text =p.number_to_words(amount).replace(',','')
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), text, font)
+                elif value in ['general','company_name','customer_name']:
+                    textbox = TextBox(tb_config)
+                    text_layer, text = textbox.generate((w, h), self.reader, font)
+                    self.reader.prev()
                 else:
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), self.reader, font)
                     self.reader.prev()
+                    
+                results.append({
+                        'box':[x,y,x+w,y+h],
+                        'text':text,
+                        'label':value
+                        })
 
                 if text_layer is None:
                     continue

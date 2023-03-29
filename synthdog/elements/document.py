@@ -87,13 +87,14 @@ class CheckDocument:
         text_layers, texts = self.content.generate(paper_meta)
         document_group = layers.Group([*text_layers, paper_layer]).merge()
         
-        max_width,max_height = size
-        width, height = document_group.size
-        scale = min(max_width / width, max_height / height)
-        new_width = int(width * scale)
-        new_height = int(height * scale)
-        
-        document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
+        if size is not None:
+            max_width,max_height = size
+            width, height = document_group.size
+            scale = min(max_width / width, max_height / height)
+            new_width = int(width * scale)
+            new_height = int(height * scale)
+            
+            document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
     
         #self.effect.apply([document_group])
 
@@ -135,13 +136,16 @@ class RemittanceDocument:
         text_layers, texts = self.content.generate(paper_meta)
         document_group = layers.Group([*text_layers, paper_layer]).merge()
         
-        max_width,max_height = size
-        width, height = document_group.size
-        scale = min(max_width / width, max_height / height)
-        new_width = int(width * scale)
-        new_height = int(height * scale)
-        
-        document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
+        if size is None:
+            document_group = layers.Layer(document_group.image)
+        else:
+            max_width,max_height = size
+            width, height = document_group.size
+            scale = min(max_width / width, max_height / height)
+            new_width = int(width * scale)
+            new_height = int(height * scale)
+            
+            document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
     
         #self.effect.apply([document_group])
 
