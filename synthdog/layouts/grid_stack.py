@@ -101,7 +101,13 @@ class SampleStack:
                             bold = classification['answer'].get('title','False')=='True'
                             break
             
-            upper_case = 1
+            upper_case = 0
+            for classification in obj.get('classifications',[]):
+                if classification.get('title',False):
+                    if classification['title']=='Upper_case':
+                        if classification.get('answer',False):
+                            upper_case = int(classification['answer'].get('title','False')=='True')
+                            break
                 
             formated_objects.append(([left, top, width, height],align,value,upper_case,bold))
             

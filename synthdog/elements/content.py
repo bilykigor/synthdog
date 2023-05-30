@@ -296,8 +296,13 @@ class RemittanceContent:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
                 elif value in ['cheque_number','payment_number','invoice_number','check_number']:
-                    numbertextbox = NumberTextBox(tb_config)
-                    text_layer, text = numbertextbox.generate((w, h), font)
+                    # 20% generate code for <>_number
+                    if random.random()<0.8:
+                        numbertextbox = NumberTextBox(tb_config)
+                        text_layer, text = numbertextbox.generate((w, h), font)
+                    else:
+                        codetextbox = CodeTextBox(tb_config)
+                        text_layer, text = codetextbox.generate((w, h), font)
                 elif value in ['address']:
                     addresstextbox = AddressTextBox(tb_config)
                     text_layer, text = addresstextbox.generate((w, h), font)

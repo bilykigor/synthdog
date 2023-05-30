@@ -192,12 +192,24 @@ class AmountTextBox:
         max_n_symbols = int((width-decimal_separator_width)/all_width)
         max_n_symbols = int(max_n_symbols/4*3)  
         #---------------------------------------------
+        use_symbol = random.random()<0.2
+        if use_symbol:
+            currencies = [r'$','€','£','¥','eur','usd','gbp',r'\u20AC','s','S']
+            currency = random.choice(currencies)
+            if random.random()<0.5:
+                currency+=' '
+                
+            max_n_symbols-=len(currency)
+        
         amount = random.randrange(1, min(10**max_n_symbols-1,self.max_amount))
         amount = round(amount/100,2)
         
         output_amount = amount
         amount = format_decimal(amount, locale=random.choice(list(locales.values())))
         amount = str(amount)
+        if use_symbol:
+            amount = f'{currency}{amount}'
+            
         amount = unidecode.unidecode(amount)
         #---------------------------------------------
         amount_width = 0
