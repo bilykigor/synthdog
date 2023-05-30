@@ -23,7 +23,7 @@ document:
 
   paper:
     image:
-      paths: [paper]
+      paths: [/tmp/paper]
       weights: [1]
       alpha: [1, 1]
       grayscale: 0

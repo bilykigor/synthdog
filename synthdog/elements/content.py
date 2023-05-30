@@ -5,6 +5,7 @@ MIT License
 """
 from collections import OrderedDict
 import numpy as np
+import random
 from synthtiger import components
 
 from synthdog.elements.textbox import TextBox, AddressTextBox, AmountTextBox, DateTextBox, NumberTextBox, CodeTextBox, MICRTextBox
@@ -173,6 +174,9 @@ class CheckContent:
             base_font = self.font.sample()
             
             for bbox, align, title, upper_case, bold in layout:
+                if random.random()<0.2:
+                    continue
+                
                 font = base_font.copy()
                 font['bold'] = bold
                 
@@ -265,6 +269,10 @@ class RemittanceContent:
             base_font = self.font.sample()
             
             for bbox, align, value, upper_case, bold in layout:
+                # Randomly skip 20% of boxes
+                if random.random()<0.2:
+                    continue
+                
                 #print(title)
                 font = base_font.copy()
                 font['bold'] = bold
@@ -279,7 +287,7 @@ class RemittanceContent:
                 if value in ['remove']:
                     continue
                 
-                if value in ['amount','payment_amount','invoice_amount','check_amount']:
+                if value in ['amount','payment_amount','invoice_amount','check_amount','cheque_amount']:
                     tb_config['stars_before'] = False
                     tb_config['stars_after'] = False
                     amounttextbox = AmountTextBox(tb_config)
@@ -287,7 +295,7 @@ class RemittanceContent:
                 elif value in ['number']:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
-                elif value in ['cheque_number','payment_number','invoice_number']:
+                elif value in ['cheque_number','payment_number','invoice_number','check_number']:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
                 elif value in ['address']:
@@ -296,7 +304,7 @@ class RemittanceContent:
                 elif value in ['code','reference_number']:
                     codetextbox = CodeTextBox(tb_config)
                     text_layer, text = codetextbox.generate((w, h), font)
-                elif value in ['date','payment_date','invoice_date','cheque_date']:
+                elif value in ['date','payment_date','invoice_date','cheque_date','check_date']:
                     datetextbox = DateTextBox(tb_config)
                     text_layer, text = datetextbox.generate((w, h), font)
                 elif value in ['amount_text']:

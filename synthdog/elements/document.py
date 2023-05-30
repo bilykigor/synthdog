@@ -10,6 +10,7 @@ from synthdog.elements.content import CheckContent,RemittanceContent
 from synthdog.elements.paper import Paper, CheckPaper,RemittancePaper
 from synthtiger import layers
 import cv2
+import random
 
 
 class Document:
@@ -101,6 +102,31 @@ class CheckDocument:
         return document_group, texts
 
 
+def resize_box_coordinates(box, original_size, new_size):
+    """
+    Resize box coordinates based on the resizing factor between the original size and the new size.
+    Args:
+        box (tuple): Tuple of box coordinates (x_min, y_min, x_max, y_max).
+        original_size (tuple): Tuple of the original image size (width, height).
+        new_size (tuple): Tuple of the new image size (width, height).
+    Returns:
+        tuple: Tuple of the resized box coordinates (x_min_resized, y_min_resized, x_max_resized, y_max_resized).
+    """
+    x_min, y_min, x_max, y_max = box
+    original_width, original_height = original_size
+    new_width, new_height = new_size
+
+    x_scale = new_width / original_width
+    y_scale = new_height / original_height
+
+    x_min_resized = int(x_min * x_scale)
+    y_min_resized = int(y_min * y_scale)
+    x_max_resized = int(x_max * x_scale)
+    y_max_resized = int(y_max * y_scale)
+
+    return [x_min_resized, y_min_resized, x_max_resized, y_max_resized]
+
+
 class RemittanceDocument:
     def __init__(self, parent_path, config):
         self.fullscreen = config.get("fullscreen", 0.5)
@@ -137,7 +163,15 @@ class RemittanceDocument:
         document_group = layers.Group([*text_layers, paper_layer]).merge()
         
         if size is None:
-            document_group = layers.Layer(document_group.image)
+            scale = random.uniform(0.9, 1.1)
+            width,height = document_group.size
+            new_width = int(width * scale)
+            new_height = int(height*new_width/width)
+            
+            document_group = layers.Layer(cv2.resize(document_group.image,(new_width,new_height)))
+            
+            for res in texts:
+                res['box'] = resize_box_coordinates(res['box'], (width,height), (new_width,new_height))
         else:
             max_width,max_height = size
             width, height = document_group.size
