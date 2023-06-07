@@ -13,7 +13,15 @@ from synthdog.elements import Background, Document, CheckDocument, RemittanceDoc
 from PIL import Image
 from synthtiger import components, layers, templates, read_config
 
-
+def shift_texts(left, top, texts):
+    result=[]
+    for text in texts:
+        x1,y1,x2,y2 = text['box']
+        text['box'] = [x1+left,y1+top,x2+left,y2+top]
+        result.append(text)
+        
+    return result
+    
 class CheckArea(templates.Template):
     def __init__(self, config=None, split_ratio: List[float] = [0.8, 0.1, 0.1]):
         parent_path = os.path.dirname(os.path.abspath(__file__))
@@ -293,19 +301,21 @@ class Remittance(templates.Template):
         size=None
 
         document_group, texts = self.document.generate(size)
+        
+        size = document_group.size*1.1
+        bg_layer = self.background.generate(size)
         #document_group = layers.Group([*text_layers, paper_layer])
-        # document_space = np.clip(size - document_group.size, 0, None)
-        # document_group.left = np.random.randint(document_space[0] + 1)
-        # document_group.top = np.random.randint(document_space[1] + 1)
+        document_space = np.clip(size - document_group.size, 0, None)
+        document_group.left = np.random.randint(document_space[0] + 1)
+        document_group.top = np.random.randint(document_space[1] + 1)
         roi = np.array(document_group.quad, dtype=int)
         
-        #bg_layer = self.background.generate(size)
-        #layer = layers.Group([document_group, bg_layer]).merge()
-        layer = document_group
+        layer = layers.Group([document_group, bg_layer]).merge()
+        #layer = document_group
         #self.effect.apply([layer])
 
         image = layer.output()
-        label = texts
+        label = shift_texts(document_group.left,document_group.top,texts)
         #label = " ".join(texts)
         #label = label.strip()
         #label = re.sub(r"\s+", " ", label)

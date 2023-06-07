@@ -199,7 +199,10 @@ class AmountTextBox:
             if random.random()<0.5:
                 currency+=' '
                 
-            max_n_symbols-=len(currency)
+            if max_n_symbols<=len(currency):
+                use_symbol = False
+            else:
+                max_n_symbols-=len(currency)
         
         amount = random.randrange(1, min(10**max_n_symbols-1,self.max_amount))
         amount = round(amount/100,2)
