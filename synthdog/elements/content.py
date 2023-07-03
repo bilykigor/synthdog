@@ -75,11 +75,11 @@ class CheckContent:
         self.margin = config.get("margin", [0, 0.1])
         config['text']['path'] = f"{parent_path}/{config['text']['path']}"
         self.reader = TextReader(**config.get("text", {}))
-       
+
         config['font']['paths'] = [f'{parent_path}/{path}' for path in config['font']['paths']]
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
-        
+
         config['micr_font']['paths'] = [f'{parent_path}/{path}' for path in config['micr_font']['paths']]
         self.micr_font_path = config.get("micr_font").get('paths')
         self.micr_font = components.BaseFont(paths=self.micr_font_path, weights=[1]).sample()
@@ -97,34 +97,34 @@ class CheckContent:
         # layout_bbox = [layout_left, layout_top, layout_width, layout_height]
 
         text_layers, texts = [], []
-        
+
         layout = SampleStack(meta['path'],self.align)
-        
+
         layouts = layout.generate()
-        
+
         self.reader.move(np.random.randint(len(self.reader)))
 
         amount = None
         for layout in layouts:
             base_font = self.font.sample()
-            
+
             for bbox, align, title, upper_case, bold in layout:
                 if title not in ['Amount']:
                     continue
-                
+
                 font = base_font.copy()
                 font['bold'] = bold
-                
+
                 x, y, w, h = bbox
-                
+
                 upper_case = upper_case>0.5
-                
+
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
-                
+
                 amounttextbox = AmountTextBox(tb_config)
                 text_layer, amount = amounttextbox.generate((w, h), font)
-                
+
                 if text_layer is None:
                     continue
 
@@ -136,28 +136,28 @@ class CheckContent:
 
                 self.textbox_color.apply([text_layer])
                 text_layers.append(text_layer)
-                
+
         cheque_number = None
         for layout in layouts:
             base_font = self.font.sample()
-            
+
             for bbox, align, title, upper_case, bold in layout:
                 if title not in ['Cheque number']:
                     continue
-                
+
                 font = base_font.copy()
                 font['bold'] = bold
-                
+
                 x, y, w, h = bbox
-                
+
                 upper_case = upper_case>0.5
-                
+
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
-                
+
                 numbertextbox = NumberTextBox(tb_config)
                 text_layer, cheque_number = numbertextbox.generate((w, h), font)
-                
+
                 if text_layer is None:
                     continue
 
@@ -169,24 +169,24 @@ class CheckContent:
 
                 self.textbox_color.apply([text_layer])
                 text_layers.append(text_layer)
-        
+
         for layout in layouts:
             base_font = self.font.sample()
-            
+
             for bbox, align, title, upper_case, bold in layout:
                 if random.random()<0.2:
                     continue
-                
+
                 font = base_font.copy()
                 font['bold'] = bold
-                
+
                 x, y, w, h = bbox
-                
+
                 upper_case = upper_case>0.5
-                
+
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
-                
+
                 if title in ['Remove','Amount','Cheque number']:
                     continue
                 elif title in ['Address']:
@@ -235,11 +235,11 @@ class RemittanceContent:
         self.margin = config.get("margin", [0, 0.1])
         config['text']['path'] = f"{parent_path}/{config['text']['path']}"
         self.reader = TextReader(**config.get("text", {}))
-       
+
         config['font']['paths'] = [f'{parent_path}/{path}' for path in config['font']['paths']]
         self.font = components.BaseFont(**config.get("font", {}))
         self.align = config['layout']['align']
-        
+
         config['micr_font']['paths'] = [f'{parent_path}/{path}' for path in config['micr_font']['paths']]
         self.micr_font_path = config.get("micr_font").get('paths')
         self.micr_font = components.BaseFont(paths=self.micr_font_path, weights=[1]).sample()
@@ -257,36 +257,54 @@ class RemittanceContent:
         # layout_bbox = [layout_left, layout_top, layout_width, layout_height]
 
         text_layers, texts = [], []
-        
+
         layout = SampleStack(meta['path'],self.align)
-        
+
         layouts = layout.generate()
-        
+
         self.reader.move(np.random.randint(len(self.reader)))
 
         results = []
+
+        max_x = meta['w']
+        max_y = meta['h']
+        shift_under_the_line = False
+
+        if random.random() < 0.7:
+            shift_under_the_line = True
+
+
+        dy = 0
+        if shift_under_the_line:
+            line_y = max_y / 2 + (np.random() - 0.5) * max_y * 0.2
+            dy = max_y * 0.2
+
         for layout in layouts:
             base_font = self.font.sample()
-            
+
             for bbox, align, value, upper_case, bold in layout:
                 # Randomly skip 20% of boxes
                 if random.random()<0.2:
                     continue
-                
+
                 #print(title)
                 font = base_font.copy()
                 font['bold'] = bold
-                
+
                 x, y, w, h = bbox
-                
+
+                if shift_under_the_line:
+                    if y > line_y:
+                        x, y, w, h = x, y+dy, w, h
+
                 upper_case = upper_case>0.5
-                
+
                 tb_config = self.config.get("textbox", {})
                 tb_config['upper_case'] = upper_case
-                
+
                 if value in ['remove']:
                     continue
-                
+
                 if value in ['amount','payment_amount','invoice_amount','check_amount','cheque_amount']:
                     tb_config['stars_before'] = False
                     tb_config['stars_after'] = False
@@ -325,7 +343,7 @@ class RemittanceContent:
                     textbox = TextBox(tb_config)
                     text_layer, text = textbox.generate((w, h), self.reader, font)
                     self.reader.prev()
-                    
+
                 results.append({
                         'box':[x,y,x+w,y+h],
                         'text':text,
