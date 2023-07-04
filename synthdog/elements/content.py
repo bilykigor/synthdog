@@ -276,7 +276,7 @@ class RemittanceContent:
 
         dy = 0
         if shift_under_the_line:
-            line_y = max_y / 2 + (np.random() - 0.5) * max_y * 0.2
+            line_y = max_y / 2 + (random.random() - 0.5) * max_y * 0.2
             dy = max_y * 0.2
 
         for layout in layouts:
@@ -295,7 +295,7 @@ class RemittanceContent:
 
                 if shift_under_the_line:
                     if y > line_y:
-                        x, y, w, h = x, y+dy, w, h
+                        x, y, w, h = x, y+dy,
 
                 upper_case = upper_case>0.5
 
