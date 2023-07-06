@@ -295,7 +295,7 @@ class RemittanceContent:
 
                 if shift_under_the_line:
                     if y > line_y:
-                        x, y, w, h = x, y+dy,
+                        x, y, w, h = x, y+dy, w, h
 
                 upper_case = upper_case>0.5
 
