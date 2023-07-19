@@ -7,6 +7,7 @@ import json
 import os
 import re
 from typing import Any, List
+import random
 
 import numpy as np
 from synthdog.elements import Background, Document, CheckDocument, RemittanceDocument
@@ -302,7 +303,7 @@ class Remittance(templates.Template):
 
         document_group, texts = self.document.generate(size)
         
-        size = document_group.size*1.1
+        size = (document_group.size[0]*(1+0.2*random.random()), document_group.size[1]*(1.5+random.random()))
         bg_layer = self.background.generate(size)
         #document_group = layers.Group([*text_layers, paper_layer])
         document_space = np.clip(size - document_group.size, 0, None)

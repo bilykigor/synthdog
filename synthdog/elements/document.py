@@ -163,6 +163,18 @@ class RemittanceDocument:
         document_group = layers.Group([*text_layers, paper_layer]).merge()
         
         if size is None:
+            # Crop only region with data
+            boxes = [res['box'] for res in texts]
+            box_to_crop = find_bounding_box(boxes)
+            for res in texts:
+                box = res['box']
+                res['box'] = [box[0]-box_to_crop[0],box[1]-box_to_crop[1],box[2]-box_to_crop[0],box[3]-box_to_crop[1]]
+                
+            cropped_image = document_group.image[box_to_crop[1]:box_to_crop[3], box_to_crop[0]:box_to_crop[2]]
+            document_group = layers.Layer(cropped_image)
+            #-----------------------------------------
+            
+            # Random resize of document_group
             scale = random.uniform(0.9, 1.1)
             width,height = document_group.size
             new_width = int(width * scale)
@@ -172,6 +184,7 @@ class RemittanceDocument:
             
             for res in texts:
                 res['box'] = resize_box_coordinates(res['box'], (width,height), (new_width,new_height))
+            #-----------------------------------------
         else:
             max_width,max_height = size
             width, height = document_group.size
@@ -184,3 +197,13 @@ class RemittanceDocument:
         #self.effect.apply([document_group])
 
         return document_group, texts
+
+
+def find_bounding_box(boxes):
+    # Initialize min and max coordinates with the first box
+    min_x = min([x[0] for x in boxes])
+    min_y = min([x[1] for x in boxes])
+    max_x = max([x[2] for x in boxes])
+    max_y = max([x[3] for x in boxes])
+    
+    return [min_x, min_y, max_x, max_y]

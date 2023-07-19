@@ -5,7 +5,7 @@ aspect_ratio: [1, 1]
 
 background:
   image:
-    paths: [resources/background]
+    paths: [resources/blank_paper]
     weights: [1]
 
   effect:
