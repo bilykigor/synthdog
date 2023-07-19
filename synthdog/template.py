@@ -303,7 +303,9 @@ class Remittance(templates.Template):
 
         document_group, texts = self.document.generate(size)
         
-        size = (document_group.size[0]*(1+0.2*random.random()), document_group.size[1]*(1.5+random.random()))
+        old_width = document_group.size[0]
+        old_height = document_group.size[1]
+        size = (np.random.uniform(old_width, old_width*1.2), np.random.uniform(old_height, max([old_width*1.41,old_height*1.5])))
         bg_layer = self.background.generate(size)
         #document_group = layers.Group([*text_layers, paper_layer])
         document_space = np.clip(size - document_group.size, 0, None)

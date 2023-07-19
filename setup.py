@@ -28,7 +28,7 @@ def read_long_description():
 
 setup(
     name="synthdog",
-    version="0.7.0",#read_version(),
+    version="0.7.2",#read_version(),
     description="Customized synthdog package from donut-python project",
     long_description=read_long_description(),
     long_description_content_type="text/markdown",
