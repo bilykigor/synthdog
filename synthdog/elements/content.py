@@ -283,10 +283,6 @@ class RemittanceContent:
             base_font = self.font.sample()
 
             for bbox, align, value, upper_case, bold in layout:
-                # Randomly skip 20% of boxes
-                if random.random()<0.2:
-                    continue
-
                 #print(title)
                 font = base_font.copy()
                 font['bold'] = bold
@@ -304,6 +300,11 @@ class RemittanceContent:
 
                 if value in ['remove']:
                     continue
+                
+                # Randomly skip 5% of boxes
+                if value not in ['invoice_amount','invoice_number','invoice_date']:
+                    if random.random()<0.05:
+                        continue
 
                 if value in ['amount','payment_amount','invoice_amount','check_amount','cheque_amount']:
                     tb_config['stars_before'] = False
