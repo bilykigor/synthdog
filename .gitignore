@@ -142,3 +142,5 @@ synthdog/outputs/*
 synthdog/resources/paper/check/*.png
 */misc/*
 check/*
+paper_ch/*
+paper/*

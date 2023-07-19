@@ -56,6 +56,7 @@ setup(
                 'synthdog.elements',
                 'synthdog.layouts',
                 'synthdog.resources',
+                'synthdog.resources.blank_paper',
                 'synthdog.resources.background',
                 'synthdog.resources.corpus',
                 'synthdog.resources.paper',
