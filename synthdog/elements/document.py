@@ -170,7 +170,7 @@ class RemittanceDocument:
                 box = res['box']
                 res['box'] = [box[0]-box_to_crop[0],box[1]-box_to_crop[1],box[2]-box_to_crop[0],box[3]-box_to_crop[1]]
                 
-            cropped_image = document_group.image[box_to_crop[1]:box_to_crop[3], box_to_crop[0]:box_to_crop[2]]
+            cropped_image = document_group.image[box_to_crop[1]:, box_to_crop[0]:]
             document_group = layers.Layer(cropped_image)
             #-----------------------------------------
             

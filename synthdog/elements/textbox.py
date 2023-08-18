@@ -81,6 +81,16 @@ class CodeTextBox:
         char_scale = 1# height / char_layer.height
         left, top = 0, 0
 
+        if random.random() < 0.3:
+            char = '#'
+            char_layer = layers.TextLayer(char, **font)
+            char_layer.bbox = [left, top, *(char_layer.size * char_scale)]
+
+            if char_layer.right <= width:
+                char_layers.append(char_layer)
+                chars.append(char)
+                left = char_layer.right
+
         num=0
         while True:
             num+=1

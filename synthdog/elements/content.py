@@ -304,8 +304,8 @@ class RemittanceContent:
                     numbertextbox = NumberTextBox(tb_config)
                     text_layer, text = numbertextbox.generate((w, h), font)
                 elif value in ['cheque_number','payment_number','invoice_number','check_number']:
-                    # 20% generate code for <>_number
-                    if random.random()<0.8:
+                    # 30% generate code for <>_number
+                    if random.random()<0.7:
                         numbertextbox = NumberTextBox(tb_config)
                         text_layer, text = numbertextbox.generate((w, h), font)
                     else:
