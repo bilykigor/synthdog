@@ -204,7 +204,7 @@ class AmountTextBox:
         #---------------------------------------------
         use_symbol = random.random()<0.2
         if use_symbol:
-            currencies = [r'$','€','£','¥','eur','usd','gbp',r'\u20AC','s','S']
+            currencies = [r'$','€','£','¥','eur','usd','gbp','s','S']
             currency = random.choice(currencies)
             if random.random()<0.5:
                 currency+=' '
@@ -223,7 +223,7 @@ class AmountTextBox:
         if use_symbol:
             amount = f'{currency}{amount}'
             
-        amount = unidecode.unidecode(amount)
+        # amount = unidecode.unidecode(amount)
         #---------------------------------------------
         amount_width = 0
         for char in amount:
