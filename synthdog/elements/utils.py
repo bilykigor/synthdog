@@ -25,8 +25,6 @@ def read_annotations(path):
 def clean_texture(texture, annotation_objects,alpha):
     formated_objects = []
     for obj in annotation_objects:
-        if obj['value'] == 'block':
-            continue
         name = obj['title']
         bbox = obj['bbox']
         top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']
@@ -55,6 +53,8 @@ def clean_texture2(image, annotation_objects,alpha):
     image_cv2_reverse = cv2.bitwise_not(image_cv2)
 
     for obj in annotation_objects:
+        if obj['value'] == 'block':
+            continue
         bbox = obj['bbox']
         top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']
         right = left + width
