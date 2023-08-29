@@ -289,6 +289,10 @@ class RemittanceContent:
 
                 if value in ['remove']:
                     continue
+
+                if value in ['block']:
+                    results.append({'box': [x,y,x+w,y+h], 'text': '', 'label': value})
+                    continue
                 
                 # Randomly skip 5% of boxes
                 if value not in ['invoice_amount','invoice_number','invoice_date']:
