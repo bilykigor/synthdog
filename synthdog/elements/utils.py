@@ -25,6 +25,8 @@ def read_annotations(path):
 def clean_texture(texture, annotation_objects,alpha):
     formated_objects = []
     for obj in annotation_objects:
+        if obj['value'] == 'block':
+            continue
         name = obj['title']
         bbox = obj['bbox']
         top, left, height, width = bbox['top'], bbox['left'], bbox['height'], bbox['width']

@@ -144,3 +144,6 @@ synthdog/resources/paper/check/*.png
 check/*
 paper_ch/*
 paper/*
+
+synthdog/paper/*
+test.ipynb
