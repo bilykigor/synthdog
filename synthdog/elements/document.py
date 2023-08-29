@@ -166,58 +166,59 @@ class RemittanceDocument:
         # get blocks and sort by area
 
         blocks = [item['box'] for item in texts if item['label'] == 'block']
-        blocks.sort(key=lambda item: (item[2] - item[0]) * (item[3] - item[1]), reverse=True)
+        if blocks != []:
+            blocks.sort(key=lambda item: (item[2] - item[0]) * (item[3] - item[1]), reverse=True)
 
-        # textboxes to blocks
-        new_texts = []
+            # textboxes to blocks
+            new_texts = []
 
-        block_to_textboxes = {encode_block(block): [] for block in blocks}
+            block_to_textboxes = {encode_block(block): [] for block in blocks}
 
-        for textbox in texts:
-            if textbox['label'] == 'block':
-                continue
+            for textbox in texts:
+                if textbox['label'] == 'block':
+                    continue
 
-            box = textbox['box']
+                box = textbox['box']
+                for block in blocks:
+                    if check_box(box, block):
+                        block_to_textboxes[encode_block(block)].append({'box': [box[0] - block[0], box[1] - block[1], box[2] - block[0], box[3] - block[1]], 'text': textbox['text'], 'label': textbox['label']})
+                        break
+
+
+            w = paper_meta['w']
+            h = paper_meta['h']
+            already_placed = []
+            origin = []
+
+            prev_image = document_group.image
+
+            blank_image = prev_image.copy()
+            blank_image[:,:] = 255
+
             for block in blocks:
-                if check_box(box, block):
-                    block_to_textboxes[encode_block(block)].append({'box': [box[0] - block[0], box[1] - block[1], box[2] - block[0], box[3] - block[1]], 'text': textbox['text'], 'label': textbox['label']})
-                    break
-
-
-        w = paper_meta['w']
-        h = paper_meta['h']
-        already_placed = []
-        origin = []
-
-        prev_image = document_group.image
-
-        blank_image = prev_image.copy()
-        blank_image[:,:] = 255
-
-        for block in blocks:
-            place_x = int(random.random() * (w - (block[2] - block[0])))
-            place_y = int(random.random() * (h - (block[3] - block[1])))
-
-            pot_placed = [place_x, place_y, place_x + (block[2] - block[0]), place_y + (block[3] - block[1])]
-
-            while(rule(pot_placed, already_placed)):
                 place_x = int(random.random() * (w - (block[2] - block[0])))
                 place_y = int(random.random() * (h - (block[3] - block[1])))
 
                 pot_placed = [place_x, place_y, place_x + (block[2] - block[0]), place_y + (block[3] - block[1])]
-            
-            already_placed.append(pot_placed)
-            origin.append(block)
-            for textbox in block_to_textboxes[encode_block(block)]:
-                new_texts.append({'box': [place_x + textbox['box'][0], place_y + textbox['box'][1], place_x + textbox['box'][2], place_y + textbox['box'][3]], 'text': textbox['text'], 'label': textbox['label']})
 
-        for blank, orig in zip(already_placed, origin):
-            # print(blank)
-            # print(orig)
-            blank_image[blank[1]:blank[3], blank[0]:blank[2]] = prev_image[orig[1]:orig[3], orig[0]:orig[2]]
-        
-        texts = new_texts
-        document_group = layers.Layer(blank_image)
+                while(rule(pot_placed, already_placed)):
+                    place_x = int(random.random() * (w - (block[2] - block[0])))
+                    place_y = int(random.random() * (h - (block[3] - block[1])))
+
+                    pot_placed = [place_x, place_y, place_x + (block[2] - block[0]), place_y + (block[3] - block[1])]
+                
+                already_placed.append(pot_placed)
+                origin.append(block)
+                for textbox in block_to_textboxes[encode_block(block)]:
+                    new_texts.append({'box': [place_x + textbox['box'][0], place_y + textbox['box'][1], place_x + textbox['box'][2], place_y + textbox['box'][3]], 'text': textbox['text'], 'label': textbox['label']})
+
+            for blank, orig in zip(already_placed, origin):
+                # print(blank)
+                # print(orig)
+                blank_image[blank[1]:blank[3], blank[0]:blank[2]] = prev_image[orig[1]:orig[3], orig[0]:orig[2]]
+            
+            texts = new_texts
+            document_group = layers.Layer(blank_image)
 
         if size is None:
             # Crop only region with data
