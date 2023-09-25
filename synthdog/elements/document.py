@@ -222,14 +222,14 @@ class RemittanceDocument:
 
         if size is None:
             # Crop only region with data
-            boxes = [res['box'] for res in texts]
-            box_to_crop = find_bounding_box(boxes)
-            for res in texts:
-                box = res['box']
-                res['box'] = [box[0]-box_to_crop[0],box[1]-box_to_crop[1],box[2]-box_to_crop[0],box[3]-box_to_crop[1]]
+            # boxes = [res['box'] for res in texts]
+            # box_to_crop = find_bounding_box(boxes)
+            # for res in texts:
+            #     box = res['box']
+            #     res['box'] = [box[0]-box_to_crop[0],box[1]-box_to_crop[1],box[2]-box_to_crop[0],box[3]-box_to_crop[1]]
                 
-            cropped_image = document_group.image[box_to_crop[1]:, box_to_crop[0]:]
-            document_group = layers.Layer(cropped_image)
+            # cropped_image = document_group.image[box_to_crop[1]:, box_to_crop[0]:]
+            # document_group = layers.Layer(cropped_image)
             #-----------------------------------------
             
             # Random resize of document_group
