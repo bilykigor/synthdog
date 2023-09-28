@@ -195,30 +195,44 @@ class RemittanceDocument:
             blank_image = prev_image.copy()
             blank_image[:,:] = 255
 
+            random_placed = True
+
             for block in blocks:
                 place_x = int(random.random() * (w - (block[2] - block[0])))
                 place_y = int(random.random() * (h - (block[3] - block[1])))
 
                 pot_placed = [place_x, place_y, place_x + (block[2] - block[0]), place_y + (block[3] - block[1])]
 
+                counter = 200
+                block_placed = True
+
                 while(rule(pot_placed, already_placed)):
+                    counter -= 1
+                    if counter == 0:
+                        block_placed = False
+                        break
                     place_x = int(random.random() * (w - (block[2] - block[0])))
                     place_y = int(random.random() * (h - (block[3] - block[1])))
 
                     pot_placed = [place_x, place_y, place_x + (block[2] - block[0]), place_y + (block[3] - block[1])]
                 
-                already_placed.append(pot_placed)
-                origin.append(block)
-                for textbox in block_to_textboxes[encode_block(block)]:
-                    new_texts.append({'box': [place_x + textbox['box'][0], place_y + textbox['box'][1], place_x + textbox['box'][2], place_y + textbox['box'][3]], 'text': textbox['text'], 'label': textbox['label']})
+                if block_placed:
+                    already_placed.append(pot_placed)
+                    origin.append(block)
+                    for textbox in block_to_textboxes[encode_block(block)]:
+                        new_texts.append({'box': [place_x + textbox['box'][0], place_y + textbox['box'][1], place_x + textbox['box'][2], place_y + textbox['box'][3]], 'text': textbox['text'], 'label': textbox['label']})
+                else:
+                    random_placed = False
+                    break
 
-            for blank, orig in zip(already_placed, origin):
-                # print(blank)
-                # print(orig)
-                blank_image[blank[1]:blank[3], blank[0]:blank[2]] = prev_image[orig[1]:orig[3], orig[0]:orig[2]]
-            
-            texts = new_texts
-            document_group = layers.Layer(blank_image)
+            if random_placed:
+                for blank, orig in zip(already_placed, origin):
+                    # print(blank)
+                    # print(orig)
+                    blank_image[blank[1]:blank[3], blank[0]:blank[2]] = prev_image[orig[1]:orig[3], orig[0]:orig[2]]
+                
+                texts = new_texts
+                document_group = layers.Layer(blank_image)
 
         if size is None:
             # Crop only region with data
